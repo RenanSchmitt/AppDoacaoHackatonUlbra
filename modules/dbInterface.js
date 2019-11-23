@@ -5,17 +5,10 @@ function MakeQuery(query) {
     return new Promise((resolve, reject) => {
         mysql.connection.then(conn => {
             conn.query(query, (err, rows) => {
-                if (err) {
-                    console.error("Erro executando a query:\n", query, "\n", err);
-                    reject(err);
-                    res.sendStatus(500);
-                } else
-                    resolve(rows);
+                if (err) reject(err);
+                else resolve(rows);
             });
-        }).catch(err => {
-            console.error("Erro abrindo conexão com o banco:\n", err);
-            res.sendStatus(500);
-        });
+        }).catch(reject);
     });
 }
 
@@ -33,62 +26,39 @@ function GetProduto(id) {
 function Insert(table, values) {
     return new Promise((resolve, reject) => {
         MakeQuery(`insert into ${table}(${Object.keys(values).join(",")}) values(${Object.keys(values).map(key => mysql.mysql.escape(values[key])).join(",")})`).then(res => {
-            resolve();
+            resolve(res);
         }).catch(reject);
     });
 }
 
 /**
  * 
- * @param {String} nome 
- * @param {String} descricao
- * @param {String} img 
- * @param {String} owner 
+ * @param {Object} data
  */
-function NovoProduto(nome, descricao, img, owner) {
+function NovoProduto(data) {
     return new Promise((resolve, reject) => {
-        Insert("produto", {
-            nome: nome,
-            descricao: descricao,
-            img: img,
-            owner: owner
-        }).then(resolve).catch(reject);
+        Insert("produto", data).then(resolve).catch(reject);
     });
 }
 
 /**
  * 
- * @param {String} nome 
- * @param {String} motivo 
- * @param {String} descricao 
- * @param {String} requester 
+ * @param {Object} data
  */
-function NovoPedido(nome, motivo, descricao, requester) {
+function NovoPedido(data) {
     return new Promise((resolve, reject) => {
-        Insert("pedido", {
-            nome: nome,
-            motivo: motivo,
-            descricao: descricao,
-            requester: requester
-        }).then(resolve).catch(reject);
+        Insert("pedido", data).then(resolve).catch(reject);
     });
 }
 
 /**
  * 
- * @param {String} username 
- * @param {String} password 
- * @param {String} email 
- * @param {String} doador 
+ * @param {Object} data 
  */
-function NovoUsuario(username, password, email, doador) {
+function NovoUsuario(data) {
     return new Promise((resolve, reject) => {
-        Insert("users", {
-            username: username,
-            password: helpers.Hash(password),
-            email: email,
-            doador: doador
-        }).then(resolve).catch(reject);
+        data.password = helpers.Hash(data.password);
+        Insert("users", data).then(resolve).catch(reject);
     });
 }
 

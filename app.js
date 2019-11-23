@@ -24,10 +24,20 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    if (req.session.username)
-        res.sendFile(`${__dirname}/public/index.html`);
-    else
+    if (!req.session.username)
         res.redirect("/login");
+    else {
+        switch (Number(req.session.doador)) {
+            case 1:
+                res.sendFile(`${__dirname}/public/doador/index.html`);
+                break;
+            case 2:
+                res.sendFile(`${__dirname}/public/beneficiado/index.html`);
+                break;
+            default:
+                res.status(500).send(`Classe '${req.session.doador}' inválida`);
+        }
+    }
 });
 
 app.use(express.static("public"));
@@ -45,11 +55,12 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
     console.log(req.body);
-    db.QueryUnique(`select password, id, username from users where lower(email)=lower(${db.MySQL.mysql.escape(req.body.email)})`).then(result => {
+    db.QueryUnique(`select password, id, username, doador from users where lower(email)=lower(${db.MySQL.mysql.escape(req.body.email)})`).then(result => {
         if (passwdHasher.Check(req.body.password, result.password)) {
             console.log("autenticado");
             req.session.userid = result.id;
             req.session.username = result.username;
+            req.session.doador = result.doador;
             res.redirect("/");
         } else {
             console.log("Senha incorreta");
@@ -65,11 +76,18 @@ app.get("/cadastrar", (req, res) => {
 });
 
 app.post("/cadastrar", (req, res) => {
-    db.NovoUsuario(req.body.username, req.body.password, req.body.email, req.body.doador).then(() => {
-        res.send("OK");
+    req.body.id = undefined;
+    db.NovoUsuario(req.body).then(success => {
+        req.session.userid = success.insertId;
+        req.session.username = req.body.username;
+        req.session.doador = req.body.doador;
+        res.redirect("/");
     }).catch(err => {
+        if (err.code && err.code == "ER_DUP_ENTRY")
+            res.status(400).send("Um usuário com esse e-mail já está cadastrado");
+        else
+            res.status(500).send(err);
         console.error(err);
-        res.status(500).send(err);
     });
 });
 
@@ -79,9 +97,9 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/novo_produto", (req, res) => {
-    console.log(req.body);
-    db.NovoProduto(req.body.name, req.body.descricao, req.body.img, req.session.userid).then(() => {
-        res.send("OK");
+    req.body.id = undefined;
+    db.NovoProduto(req.body).then(() => {
+        res.redirect("/");
     }).catch(err => {
         console.error(err);
         res.status(500).send(err);
@@ -89,8 +107,9 @@ app.post("/novo_produto", (req, res) => {
 });
 
 app.post("/novo_pedido", (req, res) => {
-    db.NovoPedido(req.body.nome, req.body.motivo, req.body.descricao, req.session.userid).then(() => {
-        res.send("OK");
+    req.body.id = undefined;
+    db.NovoPedido(req.body).then(() => {
+        res.redirect("/");
     }).catch(err => {
         console.error(err);
         res.status(500).send(err);
