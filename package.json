@@ -1,0 +1,27 @@
+{
+  "name": "ajuda-ae",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --timeout 2000 --exit",
+    "start": "mocha --timeout 2000 --exit & nodemon app.js"
+  },
+  "author": "Renan Schmitt",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.17.0",
+    "interval-promise": "^1.3.0",
+    "morgan": "^1.9.1",
+    "mysql": "^2.17.1"
+  }
+}
