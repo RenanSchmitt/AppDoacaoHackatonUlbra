@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cadastrar-se - Ajuda Ae</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> -->
+        <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
+        <!-- Bulma Version 0.8.x-->
+        <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+        <link rel="stylesheet" type="text/css" href="../css/login.css">
+    </head>
+
+    <body>
+        <section class="hero is-success is-fullheight">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <div class="column is-4 is-offset-4">
+                        <p class="subtitle has-text-black">Cadastrar-se</p>
+                        <div class="box">
+                            <figure class="avatar">
+                                <img src="imgs/logo.PNG">
+                            </figure>
+                            <form action="/cadastrar" method="POST">
+                                <div class="field">
+                                    <div class="control">
+                                        <input name="username" class="input is-large" type="text" placeholder="Digite seu nome" autofocus="">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <input name="email" class="input is-large" type="email" placeholder="Digite seu email" autofocus="">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <input name="password" class="input is-large" type="password" placeholder="Digite sua senha">
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label>Você é:</label><br>
+                                    <label class="radio">
+                                        <input type="radio" value="1" name="doador"> Doador </label>
+                                    <label class="radio">
+                                        <input type="radio" value="2" name="doador"> Beneficiado </label>
+                                </div>
+                                <br>
+                                <div class="field is-grouped">
+                                    <p class="control">
+                                        <input type="submit" class="button is-primary" value="Cadastrar">
+                                    </p>
+                                    <p class="control">
+                                        <a class="button is-light"> Limpar </a>
+                                    </p>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                    <p class="has-text-grey">
+                        <a href="/login">Logar-se</a> &nbsp;·&nbsp; </p>
+                </div>
+            </div>
+            </div>
+        </section>
+        <script async type="text/javascript" src="../js/bulma.js"></script>
+    </body>
+
+</html>
