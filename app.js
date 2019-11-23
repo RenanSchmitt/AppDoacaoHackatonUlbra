@@ -7,9 +7,10 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 
 //db.NovoPedido("Teste", "sei lá", "vish", 1).then(() => console.log("salvo"));
+//db.LinkTag({iditem:})
 
 app.use(session({
-    secret: passwdHasher.GenSalt(128),
+    secret: "seilamano",//passwdHasher.GenSalt(128),
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
@@ -24,10 +25,10 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    if (!req.session.username)
+    if (req.session.userid == undefined)
         res.redirect("/login");
     else {
-        switch (Number(req.session.doador)) {
+        switch (req.session.doador) {
             case 1:
                 res.sendFile(`${__dirname}/public/doador/index.html`);
                 break;
@@ -42,19 +43,28 @@ app.get("/", (req, res) => {
 
 app.use(express.static("public"));
 
-app.get("/usuario/:id", (req, res) => {
-    db.GetUser(Number(req.params.id)).then(user => res.send(user)).catch(err => res.status(500).send(err));
-});
-
 app.get("/login", (req, res) => {
-    if (req.session.username)
+    if (req.session.userid != undefined)
         res.redirect("/");
     else
         res.sendFile(`${__dirname}/public/login.html`);
 });
 
+app.get("/getitems/:id", (req, res) => {
+    db.GetItems(req.params.id)
+        .then(resp => res.send(JSON.stringify(resp, null, 2)))
+        .catch(err => {
+            console.error(err);
+            res.status(500).send(err);
+        });
+});
+
+app.post("/newtag", (req, res) => {
+    //req.body.id = undefined;
+    db.NewTag(req.body).then(resp => res.send({ nome: req.body.nome, id: resp.insertId })).catch(err => res.status(500).send(err));
+});
+
 app.post("/login", (req, res) => {
-    console.log(req.body);
     db.QueryUnique(`select password, id, username, doador from users where lower(email)=lower(${db.MySQL.mysql.escape(req.body.email)})`).then(result => {
         if (passwdHasher.Check(req.body.password, result.password)) {
             console.log("autenticado");
@@ -76,11 +86,11 @@ app.get("/cadastrar", (req, res) => {
 });
 
 app.post("/cadastrar", (req, res) => {
-    req.body.id = undefined;
+    //req.body.id = undefined;
     db.NovoUsuario(req.body).then(success => {
         req.session.userid = success.insertId;
         req.session.username = req.body.username;
-        req.session.doador = req.body.doador;
+        req.session.doador = Number(req.body.doador);
         res.redirect("/");
     }).catch(err => {
         if (err.code && err.code == "ER_DUP_ENTRY")
@@ -97,7 +107,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/novo_produto", (req, res) => {
-    req.body.id = undefined;
+    //req.body.id = undefined;
     db.NovoProduto(req.body).then(() => {
         res.redirect("/");
     }).catch(err => {
@@ -107,7 +117,7 @@ app.post("/novo_produto", (req, res) => {
 });
 
 app.post("/novo_pedido", (req, res) => {
-    req.body.id = undefined;
+    //req.body.id = undefined;
     db.NovoPedido(req.body).then(() => {
         res.redirect("/");
     }).catch(err => {

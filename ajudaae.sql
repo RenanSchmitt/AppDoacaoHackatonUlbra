@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: mysql669.umbler.com
--- Generation Time: Nov 23, 2019 at 08:53 AM
+-- Generation Time: Nov 23, 2019 at 09:48 AM
 -- Server version: 5.6.40
 -- PHP Version: 5.4.8
 
@@ -60,14 +60,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(140) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
   `doador` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `doador`) VALUES
-(4, 'Thiago', 'sha512:5lFL/y9wF1bOKbfcGyPYk9hUYEUdbJUt9dSYJ6KOfm4=:Cme14ExEF/ftpbFz31l3V4BiV/bW3npyArdgmsPqrM51Ir/+kA0kL99JaXapG8O7hgpPzoUFGVRZavKFTtTIHw==', 'thiagofnsc@outlook.com', 1);
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -111,7 +104,7 @@ ALTER TABLE `produto`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- Constraints for dumped tables
 --

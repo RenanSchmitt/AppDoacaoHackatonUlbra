@@ -18,6 +18,22 @@ function GetProduto(id) {
     });
 }
 
+function GetTags() {
+    return new Promise((resolve, reject) => {
+        MakeQuery("select * from tag").then(resolve).catch(reject);
+    });
+}
+
+/**
+ * 
+ * @param {Object} values 
+ */
+function NewTag(values) {
+    return new Promise((resolve, reject) => {
+        Insert("tag", values).then(resolve).catch(reject);
+    });
+}
+
 /**
  * 
  * @param {String} table 
@@ -94,16 +110,56 @@ function GetUnique(table, id) {
  */
 function GetUser(id) {
     return new Promise((resolve, reject) => {
-        GetUnique("user", id).then(resolve).catch(reject);
+        console.log("Procurando o usuário ", id);
+        GetUnique("users", id).then(resolve).catch(reject);
+    });
+}
+
+/**
+ * 
+ * @param {Object} values 
+ */
+function LinkTag(values) {
+    return new Promise((resolve, reject) => {
+        Insert(values.doador == 1 ? "tagproduto" : "tagpedido", { idtag: values.idtag, iditem: values.iditem }).then(resolve).catch(reject);
+    });
+}
+
+
+function GetItems(userid) {
+    return new Promise((resolve, reject) => {
+        GetUser(userid).then(user => {
+            MakeQuery(`select * from ${user.doador == 1 ? "produto" : "pedido"} where user = ${userid}`).then(itens => {
+                console.log(itens);
+                var tags = [];
+                itens.forEach(item => {
+                    tags.push(MakeQuery(`select t.nome, t.id from tag t inner join ${user.doador == 1 ? "tagproduto" : "tagpedido"} p on t.id = p.idtag where p.iditem=${item.id}`));
+                });
+                Promise.all(tags).then(alltags => {
+                    for (var i = 0; i < alltags.length; i++)
+                        itens[i].tags = alltags[i];
+                    resolve(itens.map(row => {
+                        row.id = undefined;
+                        row.user = undefined;
+                        return row;
+                    }));
+                });
+            }).catch(reject);
+        }).catch(reject);
     });
 }
 
 module.exports = {
+    MakeQuery: MakeQuery,
     GetUser: GetUser,
     NovoProduto: NovoProduto,
     NovoPedido: NovoPedido,
     NovoUsuario: NovoUsuario,
     GetProduto: GetProduto,
     QueryUnique: QueryUnique,
-    MySQL: mysql
+    MySQL: mysql,
+    GetTags: GetTags,
+    NewTag: NewTag,
+    GetItems: GetItems,
+    LinkTag: LinkTag
 }
