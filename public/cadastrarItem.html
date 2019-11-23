@@ -22,47 +22,42 @@
                         <div class="box">
                             <figure class="avatar">
                                 <img src="imgs/logo.PNG">
-                                <p class="subtitle has-text-black">Cadastrar-se</p><br>
+                                <p class="subtitle has-text-black">O que você quer doar?</p><br>
                             </figure>
                             <form action="/cadastrar" method="POST">
                                 <div class="field">
                                     <div class="control">
-                                        <input name="username" class="input is-large" type="text" placeholder="Digite seu nome" autofocus="">
+                                        <input name="nome" class="input is-large" type="text" placeholder="Nome do Item" autofocus="">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control">
-                                        <input name="email" class="input is-large" type="email" placeholder="Digite seu email" autofocus="">
+                                        <input name="descricao" class="input is-large" type="email" placeholder="Descrição do Item" autofocus="">
                                     </div>
                                 </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <input name="password" class="input is-large" type="password" placeholder="Digite sua senha">
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <input name="endereco" class="input is-large" type="text" placeholder="Seu endereço">
-                                    </div>
-                                </div>
-                                <div class="control">
-                                    <label>Você é:</label><br>
-                                    <label class="radio">
-                                        <input type="radio" value="1" name="doador"> Doador </label>
-                                    <label class="radio">
-                                        <input type="radio" value="2" name="doador"> Beneficiado </label>
+                                <div class="file has-name">
+                                    <label class="file-label">
+                                        <input class="file-input" type="file" name="resume">
+                                        <span class="file-cta">
+                                            <span class="file-icon">
+                                                <i class="fas fa-upload"></i>
+                                            </span>
+                                            <span class="file-label"> Seleciona a foto... </span>
+                                        </span>
+                                        <span class="file-name">Vazio...</span>
+                                    </label>
                                 </div>
                                 <br>
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <input type="submit" class="button is-success" value="Cadastrar">
+                                        <input type="submit" class="button is-success" value="Doar">
                                     </p>
                                     <p class="control">
                                         <a class="button is-light"> Limpar </a>
                                     </p>
                                 </div>
                             </form>
-                            <p class="has-text-grey"> Já possui uma conta?<a href="/login"><br>&nbsp;·&nbsp Clique aqui para logar Logar-se &nbsp;·&nbsp</a> </p>
+                            <p class="has-text-grey"> <a href="/"><br>&nbsp;·&nbsp Voltar &nbsp;·&nbsp</a> </p>
                         </div>
                     </div>
                 </div>

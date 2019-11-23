@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 
 //db.NovoPedido("Teste", "sei lá", "vish", 1).then(() => console.log("salvo"));
-//db.LinkTag({iditem:})
+//db.LinkTag({ iditem: 6, idtag: 2, doador: 1 });
 
 app.use(session({
     secret: "seilamano",//passwdHasher.GenSalt(128),
@@ -52,10 +52,10 @@ app.get("/login", (req, res) => {
 
 app.get("/getitems/:id", (req, res) => {
     db.GetItems(req.params.id)
-        .then(resp => res.send(JSON.stringify(resp, null, 2)))
+        .then(resp => res.send(resp))
         .catch(err => {
             console.error(err);
-            res.status(500).send(err);
+            res.status(500).send({ error: err });
         });
 });
 
@@ -125,6 +125,17 @@ app.post("/novo_pedido", (req, res) => {
         res.status(500).send(err);
     });
 });
+
+app.get("/procurar_beneficiados/:id", (req, res) => {
+    db.ProcurarBeneficiados(req.params.id).then(result => res.send(result)).catch(err => res.status(500).send(err));
+});
+
+app.get("/user/:id", (req, res) => {
+    db.GetUser(req.params.id).then(resp => {
+        resp.password = undefined;
+        res.send(resp)
+    }).catch(err => res.status(500).send(err));
+})
 
 app.listen(3000, () => {
     console.log("Escutando na 3000");

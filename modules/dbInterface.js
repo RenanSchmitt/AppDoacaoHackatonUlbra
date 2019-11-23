@@ -5,10 +5,20 @@ function MakeQuery(query) {
     return new Promise((resolve, reject) => {
         mysql.connection.then(conn => {
             conn.query(query, (err, rows) => {
+                conn.release();
                 if (err) reject(err);
                 else resolve(rows);
             });
         }).catch(reject);
+    });
+}
+
+function ProcurarBeneficiados(iddoador) {
+    return new Promise((resolve, reject) => {
+        MakeQuery(`select pedido.id as pedido, produto.id as produto, pedido.user beneficiado, produto.user as doador from pedido
+        inner join tagpedido on tagpedido.iditem = pedido.id
+        inner join tagproduto on tagproduto.idtag = tagpedido.idtag
+        inner join produto on produto.id = tagproduto.iditem where produto.user = ${mysql.mysql.escape(iddoador)}`).then(resolve).catch(reject);
     });
 }
 
@@ -169,5 +179,6 @@ module.exports = {
     GetTags: GetTags,
     NewTag: NewTag,
     GetItems: GetItems,
-    LinkTag: LinkTag
+    LinkTag: LinkTag,
+    ProcurarBeneficiados: ProcurarBeneficiados
 }
