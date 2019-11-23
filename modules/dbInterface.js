@@ -138,11 +138,19 @@ function GetItems(userid) {
                 Promise.all(tags).then(alltags => {
                     for (var i = 0; i < alltags.length; i++)
                         itens[i].tags = alltags[i];
-                    resolve(itens.map(row => {
-                        row.id = undefined;
-                        row.user = undefined;
-                        return row;
-                    }));
+                    resolve({
+                        items: itens.map(row => {
+                            row.id = undefined;
+                            row.user = undefined;
+                            return row;
+                        }),
+                        user: {
+                            name: user.username,
+                            doador: user.doador,
+                            email: user.email,
+                            endereco: user.endereco
+                        }
+                    });
                 });
             }).catch(reject);
         }).catch(reject);
