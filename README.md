@@ -78,7 +78,7 @@ AppDoacaoHackatonUlbra/
 - **Andressa Sias**  
 - **Palmer Oliveira**  
 - **Renan Schmitt**  
-- **Thiago**  
+- **Thiago Fonseca**  
 
 Todos colaboraram de forma intensa no desenvolvimento **frontend, backend e UX/UI**, garantindo uma plataforma funcional e de alto impacto social.
 
